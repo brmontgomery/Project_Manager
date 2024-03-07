@@ -1,0 +1,65 @@
+version: '3.1'
+secrets:
+    pg-password:
+        file: postgres/password.txt
+services:
+    nginx:
+        restart: always
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./nginx
+        ports:
+            - '3050:80'
+    api:
+        restart: on-failure
+        build:
+            dockerfile: Dockerfile.dev
+            context: './api'
+            target: final
+        ports:
+            - 8010:8010
+        environment:
+            - PGUSER="postgres"
+            - POSTGRES_DB=it_project_management_api
+            - POSTGRES_PASSWORD_FILE=/run/secrets/pg-password
+        depends_on:
+            postgres:
+                condition: service_healthy
+        volumes:
+            - ./api:/app
+    client:
+        build:
+            dockerfile: Dockerfile.dev
+            context: './client'
+            target: final
+        ports:
+            - 8080:8080
+        volumes:
+            - ./client:/app
+    postgres:
+        image: postgres
+        restart: always
+        user: postgres
+        secrets:
+            - pg-password
+        healthcheck:
+            test: [ "CMD", "pg_isready" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        ports:
+          - '5432:5432'
+        environment:
+            - POSTGRES_DB=it_project_management_api
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD_FILE=/run/secrets/pg-password
+        volumes:
+          - postgres-data:/var/lib/postgresql/data
+    redis:
+        image: redis:latest
+        volumes:
+            - ./data/redis:/data
+        ports:
+            - 6379:6379
+volumes:
+    postgres-data:

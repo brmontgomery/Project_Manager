@@ -1,0 +1,1 @@
+C:\Users\brian\Documents\Code\Project_Manager\app\client\target\wasm32-unknown-unknown\debug\it_project_manager_client.wasm: C:\Users\brian\Documents\Code\Project_Manager\app\client\src\app.rs C:\Users\brian\Documents\Code\Project_Manager\app\client\src\main.rs

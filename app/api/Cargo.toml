@@ -1,0 +1,15 @@
+[package]
+name = "it_project_manager_api"
+version = "0.1.0"
+edition = "2021"
+description = "Server Side SPI for the IT Project Management System."
+readme = "README.md"
+repository = "https://github.com/brmontgomery/Project_Manager"
+license = "MIT"
+keywords = ["axum", "tower"]
+categories = ["backend", "web-programming"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
+axum = "0.7.4"
+tokio = { version = "1.35.0", features = ["full"] }
